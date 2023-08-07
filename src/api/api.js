@@ -34,7 +34,7 @@ class DatabaseConnector {
 }
 
 // Définir une route pour récupérer les données de la base de données
-app.get('/api/data', async (req, res) => {
+app.get('/api.js', async (req, res) => {
     const connection = await DatabaseConnector.connect();
 
     if (!connection) {
@@ -45,7 +45,8 @@ app.get('/api/data', async (req, res) => {
     try {
         // Récupérer les données de la table_joueurs
         const [rows] = await connection.query('SELECT * FROM table_joueurs');
-        res.json(rows);
+        res.setHeader('Content-Type', 'application/json'); // Définir le type de contenu comme JSON
+        res.json(rows); // Renvoyer les données au format JSON
     } catch (error) {
         console.error('\nErreur lors de la récupération des données:', error + '\n');
         res.status(500).json({ error: '\nErreur lors de la récupération des données\n' });
@@ -58,4 +59,3 @@ app.get('/api/data', async (req, res) => {
 module.exports = {
     DatabaseConnector
 }
-
