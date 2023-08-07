@@ -4,6 +4,9 @@ const { app } = require('../api/api');
 const dbConfig = require("../config/config");
 const logger = require('../misc/logger');
 const createCLI = require('../misc/cli');
+const express = require("express");
+
+const app = express();
 
 const port = dbConfig.port; // Vous pouvez changer le port si nécessaire
 app.listen(port, () => {
