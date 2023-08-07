@@ -4,8 +4,9 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "minewatch:start": "node src/app/app.js",
-    "minewatch:dependencies": "./dependencies.sh"
+    "minewatch:launch": "node src/app/app.js",
+    "minewatch:dependencies": "src/shell/dependencies.sh",
+    "minewatch:start": "chmod u+x src/shell/misc.sh && src/shell/misc.sh"
   },
   "author": "Sandro642",
   "license": "MIT",

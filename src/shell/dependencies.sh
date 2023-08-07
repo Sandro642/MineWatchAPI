@@ -14,6 +14,7 @@ function install_if_not_exists() {
 install_if_not_exists "install express"
 install_if_not_exists "install mysql2"
 install_if_not_exists "install colors"
+install_if_not_exists "install -g pm2"
 
 #Last command
 install_if_not_exists "install"
