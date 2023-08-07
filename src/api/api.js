@@ -1,52 +1,61 @@
-// api.js
-
-require('colors');
-
-const http = require('http');
 const express = require('express');
-const mysql = require('mysql');
-const cors = require('cors');
-const config = require('../config/config');
-const logger = require('../misc/logger');
+const mysql = require('mysql2/promise'); // Utilisez la version promise de mysql2 pour les requêtes asynchrones
+const dbConfig = require('../config/config'); // Importer les informations de configuration depuis le fichier config.js
 
 const app = express();
-const port = config.port; // Remplacez par le port sur lequel vous souhaitez que l'API s'exécute
 
-// Autoriser toutes les origines
-app.use(cors());
+// Var
+let rows = {};
 
-// Configuration de la base de données
-const dbConnection = mysql.createConnection(config);
+// Classe JavaScript pour gérer la connexion à la base de données
+class DatabaseConnector {
+    // Méthode statique pour se connecter à la base de données
+    static async connect() {
+        try {
+            const pool = mysql.createPool(dbConfig);
+            const connection = await pool.getConnection();
+            console.log('Connexion à la base de données réussie.\n');
+            return connection;
+        } catch (error) {
+            console.error('\nErreur lors de la connexion à la base de données:', error + '\n');
+            return null;
+        }
+    }
 
-// Vérifier la connexion à la base de données
-dbConnection.connect((err) => {
-    if (err) {
-        console.error('Erreur de connexion à la base de données :', err.message);
+    // Méthode statique pour fermer la connexion à la base de données
+    static async disconnect(connection) {
+        try {
+            await connection.release();
+            console.log('\nDéconnexion de la base de données réussie.\n');
+        } catch (error) {
+            console.error('\nErreur lors de la déconnexion de la base de données:', error + '\n');
+        }
+    }
+}
+
+// Définir une route pour récupérer les données de la base de données
+app.get('/api/data', async (req, res) => {
+    const connection = await DatabaseConnector.connect();
+
+    if (!connection) {
+        res.status(500).json({ error: '\nErreur lors de la connexion à la base de données\n' });
         return;
     }
 
-    console.clear();
-    console.log(logger.message.green);
-
-    // Récupérer les données de la table_joueurs avec le temps de l'action
-    const sql = 'SELECT *, DATE_FORMAT(Timestamp, "%Y-%m-%d %H:%i:%s") as Timestamp FROM table_joueurs';
-    dbConnection.query(sql, (err, result) => {
-        if (err) {
-            console.error('Erreur lors de la récupération des données :', err.message);
-            return;
-        }
-
-        if (!result.length > 0) {
-            console.log('Aucune donnée trouvée.');
-        }
-
-        // Fermer la connexion à la base de données
-        dbConnection.end();
-    });
+    try {
+        // Récupérer les données de la table_joueurs
+        const [rows] = await connection.query('SELECT * FROM table_joueurs');
+        res.json(rows);
+    } catch (error) {
+        console.error('\nErreur lors de la récupération des données:', error + '\n');
+        res.status(500).json({ error: '\nErreur lors de la récupération des données\n' });
+    } finally {
+        // Fermer la connexion à la base de données après avoir récupéré les données
+        await DatabaseConnector.disconnect(connection);
+    }
 });
 
-// Démarrer le serveur
-const server = http.createServer(app);
-server.listen(port, () => {
-    console.log(`Serveur en cours d'écoute sur le port ${port}`);
-});
+module.exports = {
+    DatabaseConnector
+}
+
