@@ -27,7 +27,6 @@ dbConnection.connect((err) => {
 
     console.clear();
     console.log(logger.message.green);
-    console.log('')
 
     // Récupérer les données de la table_joueurs avec le temps de l'action
     const sql = 'SELECT *, DATE_FORMAT(Timestamp, "%Y-%m-%d %H:%i:%s") as Timestamp FROM table_joueurs';
