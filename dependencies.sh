@@ -13,6 +13,10 @@ function install_if_not_exists() {
 # Installer les dépendances souhaitées
 install_if_not_exists "express"
 install_if_not_exists "mysql2"
+install_if_not_exists "npm install colors"
+
+#Last command
+install_if_not_exists "npm install"
 # Ajoutez d'autres dépendances souhaitées ici
 
 echo "Toutes les installations npm sont terminées."
