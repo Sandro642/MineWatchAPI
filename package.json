@@ -1,0 +1,11 @@
+{
+  "name": "minewatchapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "author": "Sandro642",
+  "license": "MIT"
+}
