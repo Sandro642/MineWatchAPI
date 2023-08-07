@@ -67,6 +67,7 @@ function createCLI() {
                 console.log('Connexion à la base de données fermée.');
             }
             console.log('\nAu revoir !\n');
+            console.clear();
             process.exit(0);
         });
     });
