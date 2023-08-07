@@ -1,6 +1,5 @@
 require('colors');
 
-const { app } = require('../api/api');
 const dbConfig = require("../config/config");
 const logger = require('../misc/logger');
 const createCLI = require('../misc/cli');
