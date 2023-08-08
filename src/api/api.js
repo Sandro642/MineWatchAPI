@@ -49,3 +49,7 @@ const server = http.createServer((req, res) => {
         res.end('Page non trouvée.');
     }
 });
+
+module.exports = {
+    connectToDatabase
+}
