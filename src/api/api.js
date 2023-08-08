@@ -46,6 +46,7 @@ const server = http.createServer((req, res) => {
 
             // Fermer la connexion à la base de données après avoir renvoyé les données
             dbConnection.end();
+            this.result = result;
         });
     } else {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -54,5 +55,6 @@ const server = http.createServer((req, res) => {
 });
 
 module.exports = {
-    connectToDatabase
+    connectToDatabase,
+    result
 }
