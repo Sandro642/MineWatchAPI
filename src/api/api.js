@@ -1,15 +1,12 @@
 const express = require('express');
-const mysql = require('mysql2/promise'); // Utilisez la version promise de mysql2 pour les requêtes asynchrones
-const dbConfig = require('../config/config'); // Importer les informations de configuration depuis le fichier config.js
+const http = require('http');
+const mysql = require('mysql2/promise');
+const dbConfig = require('../config/config');
 
 const app = express();
 
-// Var
-let rows = {};
-
 // Classe JavaScript pour gérer la connexion à la base de données
 class DatabaseConnector {
-    // Méthode statique pour se connecter à la base de données
     static async connect() {
         try {
             const pool = mysql.createPool(dbConfig);
@@ -22,7 +19,6 @@ class DatabaseConnector {
         }
     }
 
-    // Méthode statique pour fermer la connexion à la base de données
     static async disconnect(connection) {
         try {
             await connection.release();
@@ -33,29 +29,33 @@ class DatabaseConnector {
     }
 }
 
-// Définir une route pour récupérer les données de la base de données
-app.get('/api.js', async (req, res) => {
+// Route pour récupérer les données de la base de données
+app.get('api.js', async (req, res) => {
     const connection = await DatabaseConnector.connect();
 
     if (!connection) {
-        res.status(500).json({ error: '\nErreur lors de la connexion à la base de données\n' });
+        res.status(500).json({ error: 'Erreur lors de la connexion à la base de données' });
         return;
     }
 
     try {
-        // Récupérer les données de la table_joueurs
         const [rows] = await connection.query('SELECT * FROM table_joueurs');
-        res.setHeader('Content-Type', 'application/json'); // Définir le type de contenu comme JSON
-        res.json(rows); // Renvoyer les données au format JSON
+        res.setHeader('Content-Type', 'application/json');
+        res.json(rows);
     } catch (error) {
-        console.error('\nErreur lors de la récupération des données:', error + '\n');
-        res.status(500).json({ error: '\nErreur lors de la récupération des données\n' });
+        console.error('Erreur lors de la récupération des données:', error);
+        res.status(500).json({ error: 'Erreur lors de la récupération des données' });
     } finally {
-        // Fermer la connexion à la base de données après avoir récupéré les données
         await DatabaseConnector.disconnect(connection);
     }
 });
 
-module.exports = {
-    DatabaseConnector
-}
+// Création du serveur HTTP
+const server = http.createServer(app);
+
+// Écoute du serveur sur le port 80 (HTTP)
+server.listen(80, () => {
+    console.log('Serveur HTTP en écoute sur le port 80');
+});
+
+module.exports = { DatabaseConnector, app };
