@@ -7,7 +7,7 @@ const express = require("express");
 
 const app = express();
 
-const port = dbConfig.port; // Vous pouvez changer le port si nécessaire
+const port = 3000; // Vous pouvez changer le port si nécessaire
 app.listen(port, () => {
     main();
 });
