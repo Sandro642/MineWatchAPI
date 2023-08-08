@@ -30,7 +30,7 @@ class DatabaseConnector {
 }
 
 // Route pour récupérer les données de la base de données
-app.get('api.js', async (req, res) => {
+app.get('/api', async (req, res) => {
     const connection = await DatabaseConnector.connect();
 
     if (!connection) {
@@ -53,9 +53,34 @@ app.get('api.js', async (req, res) => {
 // Création du serveur HTTP
 const server = http.createServer(app);
 
-// Écoute du serveur sur le port 80 (HTTP)
-server.listen(80, () => {
-    console.log('Serveur HTTP en écoute sur le port 80');
+// Écoute du serveur sur le port 8080 (HTTP)
+server.listen(8080, () => {
+    console.log('Serveur HTTP en écoute sur le port 8080');
 });
 
-module.exports = { DatabaseConnector, app };
+// Fonction pour récupérer et afficher les données depuis l'API
+async function fetchAndDisplayData() {
+    try {
+        const response = await fetch('/api'); // Assurez-vous que le chemin est correct
+        const data = await response.json();
+
+        const tableBody = document.querySelector('#jsonTable tbody');
+        data.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.player}</td>
+                <td>${item.action}</td>
+                <td>${item.world}</td>
+                <td>${item.heure}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Erreur lors de la récupération des données:', error);
+    }
+}
+
+// Appeler la fonction pour récupérer et afficher les données
+fetchAndDisplayData();
+
+module.exports = { DatabaseConnector };
