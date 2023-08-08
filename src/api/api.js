@@ -1,14 +1,14 @@
 const http = require('http');
-const config = require('../config/config');
+const logger = require('../config/config');
 const mysql = require('mysql');
 
 // Fonction pour établir la connexion à la base de données
 function connectToDatabase() {
     const connection = mysql.createConnection({
-        host: config.servername,
-        user: config.username,
-        password: config.password,
-        database: config.dbname
+        host: logger.host,
+        user: logger.user,
+        password: logger.password,
+        database: logger.database
     });
 
     connection.connect((error) => {
