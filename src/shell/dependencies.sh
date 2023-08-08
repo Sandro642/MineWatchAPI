@@ -11,10 +11,10 @@ function install_if_not_exists() {
 }
 
 # Installer les dépendances souhaitées
-install_if_not_exists "install express"
-install_if_not_exists "install mysql2"
-install_if_not_exists "install colors"
-install_if_not_exists "install -g pm2"
+install_if_not_exists "npm install express"
+install_if_not_exists "npm install mysql2"
+install_if_not_exists "npm install colors"
+install_if_not_exists "npm install -g pm2"
 
 #Last command
 install_if_not_exists "install"

@@ -48,7 +48,7 @@ const server = http.createServer((req, res) => {
 
             // Fermer la connexion à la base de données après avoir renvoyé les données
             dbConnection.end();
-            this.datatable = result;
+            datatable = result;
         });
     } else {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
