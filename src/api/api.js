@@ -38,7 +38,10 @@ const server = http.createServer((req, res) => {
 
             const jsonData = JSON.stringify(result);
 
-            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.writeHead(200, {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            });
             res.end(jsonData);
 
             // Fermer la connexion à la base de données après avoir renvoyé les données
