@@ -1,5 +1,5 @@
 const http = require('http');
-const config = require('./config');
+const config = require('../config/config');
 const mysql = require('mysql');
 
 // Fonction pour établir la connexion à la base de données
