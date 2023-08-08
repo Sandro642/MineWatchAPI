@@ -2,6 +2,8 @@ const http = require('http');
 const logger = require('../config/config');
 const mysql = require('mysql');
 
+let datatable = [];
+
 // Fonction pour établir la connexion à la base de données
 function connectToDatabase() {
     const connection = mysql.createConnection({
@@ -46,7 +48,7 @@ const server = http.createServer((req, res) => {
 
             // Fermer la connexion à la base de données après avoir renvoyé les données
             dbConnection.end();
-            this.result = result;
+            this.datatable = result;
         });
     } else {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -56,5 +58,5 @@ const server = http.createServer((req, res) => {
 
 module.exports = {
     connectToDatabase,
-    result
+    datatable
 }
