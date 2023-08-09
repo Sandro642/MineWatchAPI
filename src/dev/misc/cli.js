@@ -3,7 +3,7 @@ require('colors');
 const readline = require('readline');
 const mysql = require('mysql');
 const config = require('../../root/config/minewatchconfig');
-const { closeConnection, establishConnection, resultprint } = require('../../dev/api/api');
+const { closeConnection, establishConnection, data } = require('../../dev/api/api');
 const version = require('../../root/version/checkerVersion');
 
 if (version === "dev") {
@@ -43,7 +43,7 @@ if (version === "dev") {
             } else if (args[0] === 'debug') {
                 console.clear();
                 console.log(prefix + 'Debugging...\n'.green);
-                console.log(resultprint + '\n');
+                console.log(data + '\n');
             } else if (args[0] === 'api') {
                 // Check for sub-arguments
                 if (args[1] === 'start') {
@@ -67,12 +67,11 @@ if (version === "dev") {
             // Fermer la connexion à la base de données avant de quitter l'application
             dbConnection.end((err) => {
                 if (err) {
-                    console.error('Erreur lors de la fermeture de la connexion à la base de données :', err.message);
+                    console.log('Erreur lors de la fermeture de la connexion à la base de données :', err.message);
                 } else {
                     console.log('Connexion à la base de données fermée.');
                 }
                 console.log('\nAu revoir !\n');
-                console.clear();
                 process.exit(0);
             });
         });

@@ -18,6 +18,8 @@ const dbConfig = {
     database: config.database,
 };
 
+let data = [];
+
 let conn; // Déclaration de la variable de connexion en dehors du scope des fonctions
 
 if (version === "dev") {
@@ -26,7 +28,7 @@ if (version === "dev") {
         conn = mysql.createConnection(dbConfig);
         conn.connect((err) => {
             if (err) {
-                console.error('Erreur de connexion à la base de données :', err);
+                console.log('Erreur de connexion à la base de données :', err);
                 return;
             }
             console.log('Connecté à la base de données.\n');
@@ -44,7 +46,7 @@ if (version === "dev") {
 
             conn.query(createTableQuery, (createErr, createResult) => {
                 if (createErr) {
-                    console.error('Erreur lors de la création de la table :', createErr);
+                    console.log('Erreur lors de la création de la table :', createErr);
                 } else {
                     console.log('Table créée ou vérifiée avec succès.\n');
                 }
@@ -57,7 +59,7 @@ if (version === "dev") {
         if (conn) {
             conn.end(err => {
                 if (err) {
-                    console.error('Erreur lors de la fermeture de la connexion :', err + '\n');
+                    console.log('Erreur lors de la fermeture de la connexion :', err + '\n');
                 } else {
                     console.log('Connexion à la base de données fermée.\n');
                 }
@@ -72,6 +74,7 @@ if (version === "dev") {
         // Vérifier si la connexion est établie avant d'exécuter la requête
         if (!conn) {
             res.end(JSON.stringify({ message: 'La connexion à la base de données n\'est pas établie.\n' }));
+            console.log('La connexion à la base de données n\'est pas établie.\n');
             return;
         }
 
@@ -80,8 +83,9 @@ if (version === "dev") {
 
         conn.query(sql, (err, result) => {
             if (err) {
-                console.error('Erreur lors de la requête SQL :', err);
+                console.log('Erreur lors de la requête SQL :', err);
                 res.end(JSON.stringify({ message: 'Erreur lors de la récupération des données.\n' }));
+                console.log('Erreur lors de la récupération des données.\n')
                 return;
             }
 
@@ -91,7 +95,10 @@ if (version === "dev") {
                 res.end(JSON.stringify(result));
             } else {
                 res.end(JSON.stringify({ message: 'Aucune donnée trouvée.\n' }));
+                console.log('Aucune donnée trouvée.\n');
             }
+
+            data = result;
         });
     });
 
@@ -99,6 +106,7 @@ if (version === "dev") {
         establishConnection,
         closeConnection,
         server,
+        data,
     };
 }
 

@@ -8,6 +8,4 @@ const minewatchconfig = {
     port: 3306 // Remplacez par le port de votre base de données (3306 est le port par défaut pour MySQL)
 };
 
-
-
 module.exports = minewatchconfig;
