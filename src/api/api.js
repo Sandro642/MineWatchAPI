@@ -1,4 +1,4 @@
-const http = require('http');
+const http= require('http');
 const mysql = require('mysql');
 
 // Autoriser toutes les origines (à utiliser uniquement pour le développement)
@@ -46,6 +46,7 @@ const server = http.createServer((req, res) => {
             // Renvoyer les données au format JSON
             res.writeHead(200, { ...headers, 'Content-Type': 'application/json' });
             res.end(JSON.stringify(result));
+            console.log(result)
         } else {
             res.end(JSON.stringify({ message: 'Aucune donnée trouvée.' }));
         }
