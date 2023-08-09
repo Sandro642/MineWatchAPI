@@ -1,5 +1,6 @@
 const http = require('http');
 const mysql = require('mysql');
+const config = require('../config/config');
 
 let resultprint = [];
 
@@ -12,10 +13,10 @@ const headers = {
 
 // Configuration de la base de données
 const dbConfig = {
-    host: 'mysql-hungrycodes.alwaysdata.net',
-    user: '307217_sandro',
-    password: 'Sandro3345',
-    database: 'hungrycodes_minewatch',
+    host: config.host,
+    user: config.user,
+    password: config.password,
+    database: config.database,
 };
 
 let conn; // Déclaration de la variable de connexion en dehors du scope des fonctions
@@ -28,7 +29,7 @@ function establishConnection() {
             console.error('Erreur de connexion à la base de données :', err);
             return;
         }
-        console.log('Connecté à la base de données.');
+        console.log('Connecté à la base de données.\n');
     });
 }
 
@@ -37,9 +38,9 @@ function closeConnection() {
     if (conn) {
         conn.end(err => {
             if (err) {
-                console.error('Erreur lors de la fermeture de la connexion :', err);
+                console.error('Erreur lors de la fermeture de la connexion :', err + '\n');
             } else {
-                console.log('Connexion à la base de données fermée.');
+                console.log('Connexion à la base de données fermée.\n');
             }
         });
     }
@@ -51,7 +52,7 @@ const server = http.createServer((req, res) => {
 
     // Vérifier si la connexion est établie avant d'exécuter la requête
     if (!conn) {
-        res.end(JSON.stringify({ message: 'La connexion à la base de données n\'est pas établie.' }));
+        res.end(JSON.stringify({ message: 'La connexion à la base de données n\'est pas établie.\n' }));
         return;
     }
 
@@ -60,8 +61,8 @@ const server = http.createServer((req, res) => {
 
     conn.query(sql, (err, result) => {
         if (err) {
-            console.error('Erreur lors de la requête SQL :', err);
-            res.end(JSON.stringify({ message: 'Erreur lors de la récupération des données.' }));
+            console.error('Erreur lors de la requête SQL :');
+            res.end(JSON.stringify({ message: 'Erreur lors de la récupération des données.\n' }));
             return;
         }
 
@@ -70,7 +71,7 @@ const server = http.createServer((req, res) => {
             res.writeHead(200, { ...headers, 'Content-Type': 'application/json' });
             res.end(JSON.stringify(result));
         } else {
-            res.end(JSON.stringify({ message: 'Aucune donnée trouvée.' }));
+            res.end(JSON.stringify({ message: 'Aucune donnée trouvée.\n' }));
         }
 
         resultprint = result;

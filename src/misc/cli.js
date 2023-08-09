@@ -42,7 +42,7 @@ function createCLI() {
         } else if (args[0] === 'debug') {
             console.clear();
             console.log(prefix + 'Debugging...\n'.green);
-            console.log(resultprint);
+            console.log(resultprint + '\n');
         } else if (args[0] === 'api') {
             // Check for sub-arguments
             if (args[1] === 'start') {
