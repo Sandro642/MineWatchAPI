@@ -28,6 +28,25 @@ function establishConnection() {
             return;
         }
         console.log('Connecté à la base de données.\n');
+
+        // Vérifier et créer la table si elle n'existe pas
+        const createTableQuery = `
+            CREATE TABLE IF NOT EXISTS table_joueurs (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                World VARCHAR(255),
+                Player VARCHAR(255),
+                Action VARCHAR(255),
+                Timestamp DATETIME
+            );
+        `;
+
+        conn.query(createTableQuery, (createErr, createResult) => {
+            if (createErr) {
+                console.error('Erreur lors de la création de la table :', createErr);
+            } else {
+                console.log('Table créée ou vérifiée avec succès.\n');
+            }
+        });
     });
 }
 
@@ -59,7 +78,7 @@ const server = http.createServer((req, res) => {
 
     conn.query(sql, (err, result) => {
         if (err) {
-            console.error('Erreur lors de la requête SQL :');
+            console.error('Erreur lors de la requête SQL :', err);
             res.end(JSON.stringify({ message: 'Erreur lors de la récupération des données.\n' }));
             return;
         }
@@ -71,8 +90,6 @@ const server = http.createServer((req, res) => {
         } else {
             res.end(JSON.stringify({ message: 'Aucune donnée trouvée.\n' }));
         }
-
-
     });
 });
 
@@ -80,4 +97,4 @@ module.exports = {
     establishConnection,
     closeConnection,
     server,
-}
+};

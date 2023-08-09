@@ -5,7 +5,6 @@ const createCLI = require('../misc/cli');
 const { server } = require("../api/api");
 
 server.listen(8080, () => {
-    console.log("Server is running on port 8080.");
     main();
 });
 
