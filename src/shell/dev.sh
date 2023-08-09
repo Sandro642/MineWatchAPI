@@ -2,9 +2,9 @@
 
 # Déclaration du tableau de commandes
 declare -a commands=(
-    "echo 'Lancement du debug tool, V:DEV'"
-    "./src/api/api.js"
-
+    "echo 'Exécution de api.js avec Node.js'"
+    "node ./src/api/api.js"
+    "echo 'Commande api.js terminée'"
 )
 
 # Parcourir et exécuter les commandes dans le tableau
