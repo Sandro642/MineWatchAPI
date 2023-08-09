@@ -2,8 +2,6 @@ const http = require('http');
 const mysql = require('mysql');
 const config = require('../config/config');
 
-let resultprint = [];
-
 // Autoriser toutes les origines (à utiliser uniquement pour le développement)
 const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -74,7 +72,7 @@ const server = http.createServer((req, res) => {
             res.end(JSON.stringify({ message: 'Aucune donnée trouvée.\n' }));
         }
 
-        resultprint = result;
+
     });
 });
 
@@ -82,5 +80,4 @@ module.exports = {
     establishConnection,
     closeConnection,
     server,
-    resultprint,
 }
