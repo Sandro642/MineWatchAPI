@@ -3,7 +3,7 @@ require('colors');
 const readline = require('readline');
 const mysql = require('mysql');
 const config = require('../config/config');
-const { connectToDatabase, result } = require('../api/api');
+const { connection } = require('../api/api');
 
 
 const prefix = '\n[MineWatchAPI] '.blue;
@@ -48,7 +48,7 @@ function createCLI() {
             if (args[1] === 'start') {
                 console.clear();
                 console.log(prefix + 'Starting API...\n'.green)
-                await connectToDatabase();
+                await connection.connect();
             } else if (args[1] === 'stop') {
                 console.clear();
                 console.log(prefix + 'Stopping API...\n'.red)

@@ -1,62 +1,56 @@
 const http = require('http');
-const logger = require('../config/config');
+const url = require('url');
 const mysql = require('mysql');
 
-let datatable = [];
+// Autoriser toutes les origines (à utiliser uniquement pour le développement)
+const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
+    'Access-Control-Allow-Headers': 'Authorization, Content-Type'
+};
 
-// Fonction pour établir la connexion à la base de données
-function connectToDatabase() {
-    const connection = mysql.createConnection({
-        host: logger.host,
-        user: logger.user,
-        password: logger.password,
-        database: logger.database
-    });
+// Configuration de la base de données
+const dbConfig = {
+    host: 'mysql-hungrycodes.alwaysdata.net',
+    user: '307217_sandro',
+    password: 'Sandro3345',
+    database: 'hungrycodes_minewatch'
+};
 
-    connection.connect((error) => {
-        if (error) {
-            console.error('Erreur de connexion à la base de données :', error);
-            return;
-        }
-        console.log('Connexion à la base de données établie.');
-    });
+// Créer une connexion à la base de données
+const connection = mysql.createConnection(dbConfig);
 
-    return connection;
-}
-
-// Créer le serveur HTTP
-const server = http.createServer((req, res) => {
-    if (req.url === '/api.js') {
-        const dbConnection = connectToDatabase();
-
-        const sql = 'SELECT *, DATE_FORMAT(Timestamp, "%Y-%m-%d %H:%i:%s") as Timestamp FROM table_joueurs';
-        dbConnection.query(sql, (error, result) => {
-            if (error) {
-                console.error('Erreur lors de la requête SQL :', error);
-                res.writeHead(500, { 'Content-Type': 'text/plain' });
-                res.end('Erreur lors de la récupération des données.');
-                return;
-            }
-
-            const jsonData = JSON.stringify(result);
-
-            res.writeHead(200, {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            });
-            res.end(jsonData);
-
-            // Fermer la connexion à la base de données après avoir renvoyé les données
-            dbConnection.end();
-            datatable = result;
-        });
-    } else {
-        res.writeHead(404, { 'Content-Type': 'text/plain' });
-        res.end('Page non trouvée.');
+// Établir la connexion à la base de données
+connection.connect(function(err) {
+    if (err) {
+        console.log('Erreur de connexion à la base de données :', err);
+        return;
     }
+    console.log('Connecté à la base de données.');
 });
 
-module.exports = {
-    connectToDatabase,
-    datatable
-}
+// Créer un serveur HTTP
+const server = http.createServer(function(req, res) {
+    // Activer les en-têtes CORS
+    res.writeHead(200, headers);
+
+    // Récupérer les données de la table_joueurs avec le temps de l'action
+    const sql = 'SELECT *, DATE_FORMAT(Timestamp, "%Y-%m-%d %H:%i:%s") as Timestamp FROM table_joueurs';
+    connection.query(sql, function(err, result) {
+        if (err) {
+            console.log('Erreur lors de la requête SQL :', err);
+            res.end('Une erreur s\'est produite.');
+            return;
+        }
+
+        if (result.length > 0) {
+            // Renvoyer les données au format JSON
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify(result));
+        } else {
+            res.end('Aucune donnée trouvée.');
+        }
+    });
+});
+
+module.exports = connection;
