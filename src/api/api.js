@@ -2,6 +2,8 @@ const http = require('http');
 const url = require('url');
 const mysql = require('mysql');
 
+let data = [];
+
 // Autoriser toutes les origines (à utiliser uniquement pour le développement)
 const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -50,7 +52,12 @@ const server = http.createServer(function(req, res) {
         } else {
             res.end('Aucune donnée trouvée.');
         }
+
+        data = result;
     });
 });
 
-module.exports = connection;
+module.exports = {
+    data,
+    connection
+}
