@@ -2,13 +2,13 @@
   "name": "minewatchapi",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "src/root/app/app.js",
   "scripts": {
-    "minewatch:launch": "node src/app/app.js",
-    "minewatch:linux:dependencies": "chmod u+x ./src/shell/dependencies.sh && src/shell/dependencies.sh",
-    "minewatch:linux:dev": "chmod u+x ./src/shell/dev.sh && src/shell/dev.sh",
-    "minewatch:win:dependencies": "src\\shell\\dependencies.sh",
-    "minewatch:win:dev": "src\\shell\\dev.sh"
+    "minewatch:launch": "node src/root/app/app.js",
+    "minewatch:linux:dependencies": "chmod u+x src/root/shell/dependencies.sh && src/shell/dependencies.sh",
+    "minewatch:linux:dev": "chmod u+x src/root/shell/dev.sh && src/shell/dev.sh",
+    "minewatch:win:dependencies": "src\\root\\shell\\dependencies.sh",
+    "minewatch:win:dev": "src\\root\\shell\\dev.sh"
   },
   "author": "Sandro642",
   "license": "MIT",
