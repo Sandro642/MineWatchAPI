@@ -3,7 +3,7 @@ require('colors');
 const readline = require('readline');
 const mysql = require('mysql');
 const config = require('../config/config');
-const { closeConnection, establishConnection } = require('../api/api');
+const { closeConnection, establishConnection, resultprint } = require('../api/api');
 
 
 const prefix = '\n[MineWatchAPI] '.blue;
@@ -42,7 +42,7 @@ function createCLI() {
         } else if (args[0] === 'debug') {
             console.clear();
             console.log(prefix + 'Debugging...\n'.green);
-            console.log(data);
+            console.log(resultprint);
         } else if (args[0] === 'api') {
             // Check for sub-arguments
             if (args[1] === 'start') {
