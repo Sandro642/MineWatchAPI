@@ -18,7 +18,7 @@ MineWatchAPI est une API conçue pour surveiller et gérer les données des joue
 
 ## Captures d'écran
 
-> Vous pouvez insérer ici des captures d'écran de votre application en action !
+<img src="https://sandro642.github.io/screenshots/consoleminewatchapi.png" alt="photo du terminal avec l'api lancé."/>
 
 ## Installation
 
