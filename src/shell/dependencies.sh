@@ -11,10 +11,8 @@ function install_if_not_exists() {
 }
 
 # Installer les dépendances souhaitées
-install_if_not_exists "express"
 install_if_not_exists "mysql"
 install_if_not_exists "colors"
-install_if_not_exists "pm2"
 
 # Ajoutez d'autres dépendances souhaitées ici
 
