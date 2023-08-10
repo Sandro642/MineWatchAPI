@@ -20,13 +20,14 @@ if (version === "latest") {
         });
 
         function showHelp() {
-            console.log("\nCommandes disponibles : \n" +
+            console.log("\nCommandes disponibles :\n" +
                 "                       \n" +
                 "help : Affichez l'aide\n" +
                 "exit : Quittez l'application\n" +
-                "api : Sous arguments [start, stop]\n")
-
-            rl.prompt(); // Affichez à nouveau le prompt après avoir affiché l'aide
+                "api : Gestion de l'API\n" +
+                "debug : Commandes de débogage\n" +
+                "clear : Efface l'écran\n");
+            rl.prompt();
         }
 
         rl.prompt();
