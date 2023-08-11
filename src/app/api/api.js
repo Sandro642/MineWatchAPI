@@ -26,7 +26,7 @@ if (version === "latest") {
         conn = mysql.createConnection(dbConfig);
         conn.connect((err) => {
             if (err) {
-                console.error('Erreur de connexion à la base de données :', err);
+                console.error('Erreur de connexion à la base de données :');
                 return;
             }
             console.log('Connecté à la base de données.\n');
@@ -44,7 +44,7 @@ if (version === "latest") {
 
             conn.query(createTableQuery, (createErr, createResult) => {
                 if (createErr) {
-                    console.error('Erreur lors de la création de la table :', createErr);
+                    console.error('Erreur lors de la création de la table :');
                 } else {
                     console.log('Table créée ou vérifiée avec succès.\n');
                 }
@@ -57,7 +57,7 @@ if (version === "latest") {
         if (conn) {
             conn.end(err => {
                 if (err) {
-                    console.error('Erreur lors de la fermeture de la connexion :', err + '\n');
+                    console.error('Erreur lors de la fermeture de la connexion :' + '\n');
                 } else {
                     console.log('Connexion à la base de données fermée.\n');
                 }
@@ -80,7 +80,7 @@ if (version === "latest") {
 
         conn.query(sql, (err, result) => {
             if (err) {
-                console.error('Erreur lors de la requête SQL :', err);
+                console.error('Erreur lors de la requête SQL :');
                 res.end(JSON.stringify({ message: 'Erreur lors de la récupération des données.\n' }));
                 return;
             }
