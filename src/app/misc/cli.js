@@ -45,7 +45,14 @@ if (version === "latest") {
                 console.clear();
                 console.log(prefix + 'Debugging...\n'.green);
                 console.log(data + '\n');
-            } else if (args[0] === 'api') {
+            } else if (args[0] === 'edit') {
+                if (args[1] === 'config') {
+                    console.clear();
+                    console.log(prefix + 'Editing config...\n'.green);
+                    console.log('Not implemented yet.\n'.red);
+                }
+            }
+            else if (args[0] === 'api') {
                 // Check for sub-arguments
                 if (args[1] === 'start') {
                     console.clear();
