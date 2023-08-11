@@ -6,7 +6,6 @@ const { server } = require("../../app/api/api")
 const createCLI = require("../../app/misc/cli");
 
 if (version === "latest") {
-
     server.listen(8080, () => {
         main();
     });
