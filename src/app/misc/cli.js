@@ -1,12 +1,32 @@
 require('colors');
 
 const readline = require('readline');
+const fs = require('fs');
 const mysql = require('mysql');
 const config = require('../../root/config/minewatchconfig');
 const { closeConnection, establishConnection, data } = require('../api/api');
 const version = require ('../../root/version/checkerVersion');
+const existingConfig = require("../../root/config/minewatchconfig");
+
+
+let configchanged = {
+    host: 'localhost',
+    user: 'root',
+    password: 'root',
+    database: 'database',
+    port: 3306
+};
+
+try {
+    const existingConfig = require('../../root/config/minewatchconfig');
+    configchanged = { ...config, ...existingConfig };
+} catch (error) {
+    // Si le fichier de configuration n'existe pas encore, il sera créé avec les valeurs par défaut
+}
+
 
 if (version === "latest") {
+
     const prefix = '\n[MineWatchAPI] '.blue;
     const errormsg = prefix + 'Commande inconnue. Tapez "help" pour obtenir de l\'aide.\n';
 
@@ -19,15 +39,63 @@ if (version === "latest") {
             prompt: 'console'.blue + '@'.white + 'MineWatchAPI-$'.green + ' ' // Personnalisez le prompt ici
         });
 
-        function showHelp() {
-            console.log("\nCommandes disponibles :\n" +
-                "                       \n" +
-                "help : Affichez l'aide\n" +
-                "exit : Quittez l'application\n" +
-                "api : Gestion de l'API\n" +
-                "debug : Commandes de débogage\n" +
-                "clear : Efface l'écran\n");
+        function help() {
+            console.log(prefix + "Commandes disponibles :\n" +
+                "            - help : Affiche l'aide.\n" +
+                "            - assist : Fournit une assistance.\n" +
+                "            - service api start : Démarre le service API.\n" +
+                "            - service api stop : Arrête le service API.\n" +
+                "            - service editor config : Accède à l'éditeur de config.\n" +
+                "            - clear : Efface l'écran.\n" +
+                "            - exit : Quitte l'application.\n");
+
             rl.prompt();
+        }
+
+        function editConfig() {
+            rl.question('Entrez le nom d\'hôte : ', (host) => {
+                config.host = host;
+                console.clear();
+
+                rl.question('Entrez le nom d\'utilisateur : ', (user) => {
+                    config.user = user;
+                    console.clear();
+
+                    rl.question('Entrez le mot de passe : ', (password) => {
+                        config.password = password;
+                        console.clear();
+
+                        rl.question('Entrez le nom de la base de données : ', (database) => {
+                            config.database = database;
+                            console.clear();
+
+                            rl.question('Entrez le port : ', (port) => {
+                                config.port = port;
+                                console.clear();
+
+                                const configContent = `
+const minewatchconfig = {
+host: '${config.host}',
+user: '${config.user}',
+password: '${config.password}',
+database: '${config.database}',
+port: ${config.port}
+};
+
+module.exports = minewatchconfig;
+`;
+
+                                fs.writeFileSync('src/root/config/minewatchconfig.js', configContent);
+                                console.clear();
+
+                                rl.prompt();
+
+                                console.log('\nLes données de configuration ont été mises à jour.');
+                            });
+                        });
+                    });
+                });
+            });
         }
 
         rl.prompt();
@@ -35,39 +103,85 @@ if (version === "latest") {
         rl.on('line', async (input) => {
             const args = input.trim().split(' ');
 
-            if (args[0] === 'help') {
-                showHelp();
-            } else if (args[0] === 'exit') {
-                rl.close();
-            } else if (args[0] === 'clear') {
-                console.clear();
-            } else if (args[0] === 'debug') {
-                console.clear();
-                console.log(prefix + 'Debugging...\n'.green);
-                console.log(data + '\n');
-            } else if (args[0] === 'edit') {
-                if (args[1] === 'config') {
+
+            switch (args[0]) {
+                case 'help':
+                    help();
+                    break;
+
+                case 'assist':
+                    console.log(prefix + 'Assistance :');
+                    console.log("L'assistance n'est pas encore disponible.\n");
+                    break;
+
+                case 'service':
+                    if (args.length < 2) {
+                        console.log("Commande 'service' nécessite un sous-argument.\n");
+                        break;
+                    }
+                    switch (args[1]) {
+                        case 'api':
+                            if (args.length < 3) {
+                                console.log("Commande 'service api' nécessite un sous-argument.\n");
+                                break;
+                            }
+                            switch (args[2]) {
+                                case 'start':
+                                    console.log(prefix + 'Démarrage du service API...');
+                                    console.log(prefix + 'Connexion à la base de données...\n');
+                                    await establishConnection();
+                                    break;
+
+                                case 'stop':
+                                    console.log(prefix + 'Arrêt du service API...');
+                                    console.log(prefix + 'Fermeture de la connexion à la base de données...\n');
+                                    await closeConnection();
+                                    break;
+
+                                default:
+                                    console.log("Sous-commande 'start' ou 'stop' attendue pour 'service api'.\n");
+                                    break;
+                            }
+                            break;
+
+                        case 'editor':
+                            if (args.length < 3) {
+                                console.log("Commande 'service api' nécessite un sous-argument.\n");
+                                break;
+                            }
+                            switch (args[2]) {
+                                case 'config':
+                                    console.log(prefix + 'Ouverture de l\'éditeur de configuration...');
+                                    editConfig();
+                                    break;
+
+                                default:
+                                    console.log("Sous-commande 'config attendue pour 'service editor'.\n");
+                                    break;
+                            }
+                            break;
+
+                        default:
+                            console.log("Sous-commande 'api' ou 'editor' attendue pour 'service'.\n");
+                            break;
+                    }
+                    break;
+
+                case 'clear':
+                    console.log(prefix + 'Effacement de l\'écran...');
                     console.clear();
-                    console.log(prefix + 'Editing config...\n'.green);
-                    console.log('Not implemented yet.\n'.red);
-                }
-            }
-            else if (args[0] === 'api') {
-                // Check for sub-arguments
-                if (args[1] === 'start') {
-                    console.clear();
-                    console.log(prefix + 'Starting API...\n'.green)
-                    await establishConnection();
-                } else if (args[1] === 'stop') {
-                    console.clear();
-                    console.log(prefix + 'Stopping API...\n'.red)
-                    await closeConnection();
-                } else {
+                    break;
+
+                case 'exit':
+                    console.log(prefix + 'Fermeture de l\'application...');
+                    rl.close();
+                    break;
+
+                default:
                     console.log(errormsg);
-                }
-            } else {
-                console.log(errormsg);
+                    break;
             }
+
             rl.prompt();
         });
 
@@ -87,7 +201,10 @@ if (version === "latest") {
     }
 
     module.exports = createCLI;
-} else if (version === "dev") {
+}
+
+else if (version === "dev") {
+
     const prefix = '\n[MineWatchAPI] '.blue;
     const errormsg = prefix + 'Commande inconnue. Tapez "help" pour obtenir de l\'aide.\n';
 
@@ -100,14 +217,65 @@ if (version === "latest") {
             prompt: 'console'.blue + '@'.white + 'MineWatchAPI-$'.green + ' ' // Personnalisez le prompt ici
         });
 
-        function showHelp() {
-            console.log("\nCommandes disponibles : \n" +
-                "                       \n" +
-                "help : Affichez l'aide\n" +
-                "exit : Quittez l'application\n" +
-                "api : Sous arguments [start, stop]\n")
+        function help() {
+            console.log(prefix + "Commandes disponibles :\n" +
+                "            - help : Affiche l'aide.\n" +
+                "            - assist : Fournit une assistance.\n" +
+                "            - service api start : Démarre le service API.\n" +
+                "            - service api stop : Arrête le service API.\n" +
+                "            - service editor config : Accède à l'éditeur de config.\n" +
+                "            - debug : Affiche les données de débogage.\n" +
+                "            - updater : Met à jour l'API.\n" +
+                "            - clear : Efface l'écran.\n" +
+                "            - exit : Quitte l'application.\n");
 
-            rl.prompt(); // Affichez à nouveau le prompt après avoir affiché l'aide
+            rl.prompt();
+        }
+
+        function editConfig() {
+            rl.question('Entrez le nom d\'hôte : ', (host) => {
+                config.host = host;
+                console.clear();
+
+                rl.question('Entrez le nom d\'utilisateur : ', (user) => {
+                    config.user = user;
+                    console.clear();
+
+                    rl.question('Entrez le mot de passe : ', (password) => {
+                        config.password = password;
+                        console.clear();
+
+                        rl.question('Entrez le nom de la base de données : ', (database) => {
+                            config.database = database;
+                            console.clear();
+
+                            rl.question('Entrez le port : ', (port) => {
+                                config.port = port;
+                                console.clear();
+
+                                const configContent = `
+const minewatchconfig = {
+host: '${config.host}',
+user: '${config.user}',
+password: '${config.password}',
+database: '${config.database}',
+port: ${config.port}
+};
+
+module.exports = minewatchconfig;
+`;
+
+                                fs.writeFileSync('src/root/config/minewatchconfig.js', configContent);
+                                console.clear();
+                                console.log('Les données de configuration ont été mises à jour.');
+
+                                rl.prompt();
+
+                            });
+                        });
+                    });
+                });
+            });
         }
 
         rl.prompt();
@@ -115,32 +283,93 @@ if (version === "latest") {
         rl.on('line', async (input) => {
             const args = input.trim().split(' ');
 
-            if (args[0] === 'help') {
-                showHelp();
-            } else if (args[0] === 'exit') {
-                rl.close();
-            } else if (args[0] === 'clear') {
-                console.clear();
-            } else if (args[0] === 'debug') {
-                console.clear();
-                console.log(prefix + 'Debugging...\n'.green);
-                console.log(data + '\n');
-            } else if (args[0] === 'api') {
-                // Check for sub-arguments
-                if (args[1] === 'start') {
+            switch (args[0]) {
+                case 'help':
+                    help();
+                    break;
+
+                case 'assist':
+                    console.log(prefix + 'Assistance :');
+                    console.log("L'assistance n'est pas encore disponible.\n");
+                    break;
+
+                case 'service':
+                    if (args.length < 2) {
+                        console.log("Commande 'service' nécessite un sous-argument.\n");
+                        break;
+                    }
+                    switch (args[1]) {
+                        case 'api':
+                            if (args.length < 3) {
+                                console.log("Commande 'service api' nécessite un sous-argument.\n");
+                                break;
+                            }
+                            switch (args[2]) {
+                                case 'start':
+                                    console.log(prefix + 'Démarrage du service API...');
+                                    console.log(prefix + 'Connexion à la base de données...\n');
+                                    await establishConnection();
+                                    break;
+
+                                case 'stop':
+                                    console.log(prefix + 'Arrêt du service API...');
+                                    console.log(prefix + 'Fermeture de la connexion à la base de données...\n');
+                                    await closeConnection();
+                                    break;
+
+                                default:
+                                    console.log("Sous-commande 'start' ou 'stop' attendue pour 'service api'.\n");
+                                    break;
+                            }
+                            break;
+
+                        case 'editor':
+                            if (args.length < 3) {
+                                console.log("Commande 'service api' nécessite un sous-argument.\n");
+                                break;
+                            }
+                            switch (args[2]) {
+                                case 'config':
+                                    console.log(prefix + 'Ouverture de l\'éditeur de configuration...');
+                                    editConfig();
+                                    break;
+
+                                default:
+                                    console.log("Sous-commande 'config attendue pour 'service editor'.\n");
+                                    break;
+                            }
+                            break;
+
+                        default:
+                            console.log("Sous-commande 'api' ou 'editor' attendue pour 'service'.\n");
+                            break;
+                    }
+                    break;
+
+                case 'debug':
+                    console.log(prefix + 'Données de débogage :');
+                    console.log("Les données de débogage ne sont pas encore disponibles.\n");
+                    break;
+
+                case 'updater':
+                    console.log(prefix + 'Mise à jour de l\'API...');
+                    console.log("La mise à jour de l'API n'est pas encore disponible.\n");
+                    break;
+
+                case 'clear':
                     console.clear();
-                    console.log(prefix + 'Starting API...\n'.green)
-                    await establishConnection();
-                } else if (args[1] === 'stop') {
-                    console.clear();
-                    console.log(prefix + 'Stopping API...\n'.red)
-                    await closeConnection();
-                } else {
+                    break;
+
+                case 'exit':
+                    console.log(prefix + 'Fermeture de l\'application...\n');
+                    rl.close();
+                    break;
+
+                default:
                     console.log(errormsg);
-                }
-            } else {
-                console.log(errormsg);
+                    break;
             }
+
             rl.prompt();
         });
 
@@ -153,6 +382,7 @@ if (version === "latest") {
                     console.log('Connexion à la base de données fermée.');
                 }
                 console.log('\nAu revoir !\n');
+                console.clear();
                 process.exit(0);
             });
         });
