@@ -42,3 +42,5 @@ Les contributions sont les bienvenues ! Pour les contributions majeures, veuille
 ## Licence
 
 Ce projet est sous licence MIT. Pour plus d'informations, consultez le fichier [LICENCE](LICENSE).
+
+Update Lundi prochain 
