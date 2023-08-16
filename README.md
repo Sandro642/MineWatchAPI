@@ -28,12 +28,14 @@ MineWatchAPI est une API conçue pour surveiller et gérer les données des joue
 ## Configuration
 
 1. Modifiez les valeurs dans `config/config.js` pour correspondre à votre configuration de base de données.
+2. Utilisez la commande `service editor config` pour modifier le fichier de configuration.
 
 ## Utilisation
 
 1. Lancer l'application `npm run minewatch:launch`
-2. Pour lancer l'api, écrire dans le terminal `api start`
+2. Pour lancer l'api, écrire dans le terminal `service api start`
 3. Vous pouvez consulter la data depuis `http(s)://votreurl.com:8080`
+4. Vous pouvez toujours exécuter la commande `help`.
 
 ## Contributions
 
