@@ -31,6 +31,8 @@ if (version === "latest") {
             }
             console.log('Connecté à la base de données.\n');
 
+
+
             // Vérifier et créer la table si elle n'existe pas
             const createTableQuery = `
             CREATE TABLE IF NOT EXISTS table_joueurs (

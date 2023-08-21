@@ -1,9 +1,9 @@
 
 const minewatchconfig = {
 host: 'localhost',
-user: 'root',
-password: 'root',
-database: 'database',
+user: 'exit',
+password: 'exit',
+database: 'exit',
 port: 3306
 };
 

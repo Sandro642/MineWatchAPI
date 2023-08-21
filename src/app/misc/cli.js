@@ -7,7 +7,7 @@ const config = require('../../root/config/minewatchconfig');
 const { closeConnection, establishConnection, data } = require('../api/api');
 const version = require ('../../root/version/checkerVersion');
 const existingConfig = require("../../root/config/minewatchconfig");
-
+const logger = require("../../root/misc/logger");
 
 let configchanged = {
     host: 'localhost',
@@ -53,6 +53,8 @@ if (version === "latest") {
         }
 
         function editConfig() {
+            console.clear();
+            console.log(logger.message.green);
             rl.question('Entrez le nom d\'hôte : ', (host) => {
                 config.host = host;
                 console.clear();
@@ -241,6 +243,7 @@ else if (version === "dev") {
                     config.user = user;
                     console.clear();
 
+                    console.log(logger.message.green);
                     rl.question('Entrez le mot de passe : ', (password) => {
                         config.password = password;
                         console.clear();
