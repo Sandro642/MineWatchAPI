@@ -32,7 +32,7 @@ MineWatchAPI est une API conçue pour surveiller et gérer les données des joue
 
 ## Utilisation
 
-1. Lancer l'application `npm run minewatch:launch`
+1. Lancer l'application `npm run minewatch`
 2. Pour lancer l'api, écrire dans le terminal `service api start`
 3. Vous pouvez consulter la data depuis `http(s)://votreurl.com:8080`
 4. Vous pouvez toujours exécuter la commande `help`.
@@ -43,6 +43,4 @@ Les contributions sont les bienvenues ! Pour les contributions majeures, veuille
 
 ## Licence
 
-Ce projet est sous licence MIT. Pour plus d'informations, consultez le fichier [LICENCE](LICENSE).
-
-Update Lundi prochain 
+Ce projet est sous licence MIT. Pour plus d'informations, consultez le fichier [LICENCE](LICENSE). 

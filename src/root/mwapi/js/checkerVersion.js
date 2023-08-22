@@ -2,7 +2,7 @@
 const path = require('path');
 const fs = require('fs');
 
-const versionFilePath = path.join('../MineWatchAPI/version.api');
+const versionFilePath = path.join('../mwapi/file/version.mwapi');
 const versionInfoContent = fs.readFileSync(versionFilePath, 'utf-8');
 
 // Extraire la version à partir du contenu

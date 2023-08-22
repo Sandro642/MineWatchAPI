@@ -5,7 +5,7 @@ const fs = require('fs');
 const mysql = require('mysql');
 const config = require('../../root/config/minewatchconfig');
 const { closeConnection, establishConnection, data } = require('../api/api');
-const version = require ('../../root/version/checkerVersion');
+const version = require ('../../root/mwapi/js/checkerVersion');
 const existingConfig = require("../../root/config/minewatchconfig");
 const logger = require("../../root/misc/logger");
 
@@ -243,7 +243,6 @@ else if (version === "dev") {
                     config.user = user;
                     console.clear();
 
-                    console.log(logger.message.green);
                     rl.question('Entrez le mot de passe : ', (password) => {
                         config.password = password;
                         console.clear();

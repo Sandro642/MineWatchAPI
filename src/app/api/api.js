@@ -1,7 +1,7 @@
 const http = require('http');
 const mysql = require('mysql');
 const config = require('../../root/config/minewatchconfig');
-const version = require('../../root/version/checkerVersion');
+const version = require('../../root/mwapi/js/checkerVersion');
 
 // Autoriser toutes les origines (à utiliser uniquement pour le développement)
 const headers = {
@@ -22,16 +22,15 @@ let conn; // Déclaration de la variable de connexion en dehors du scope des fon
 
 if (version === "latest") {
     // Fonction pour établir la connexion à la base de données
+    // Fonction pour établir la connexion à la base de données
     function establishConnection() {
         conn = mysql.createConnection(dbConfig);
         conn.connect((err) => {
             if (err) {
-                console.error('Erreur de connexion à la base de données :');
+                console.log('Erreur de connexion à la base de données ');
                 return;
             }
             console.log('Connecté à la base de données.\n');
-
-
 
             // Vérifier et créer la table si elle n'existe pas
             const createTableQuery = `
@@ -46,7 +45,7 @@ if (version === "latest") {
 
             conn.query(createTableQuery, (createErr, createResult) => {
                 if (createErr) {
-                    console.error('Erreur lors de la création de la table :');
+                    console.log('Erreur lors de la création de la table ');
                 } else {
                     console.log('Table créée ou vérifiée avec succès.\n');
                 }

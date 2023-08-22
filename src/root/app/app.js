@@ -1,7 +1,7 @@
 require('colors');
 
 const logger = require('../misc/logger');
-const version = require('../version/checkerVersion');
+const version = require('../mwapi/js/checkerVersion');
 const { server } = require("../../app/api/api")
 const createCLI = require("../../app/misc/cli");
 
