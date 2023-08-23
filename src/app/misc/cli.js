@@ -4,10 +4,10 @@ const readline = require('readline');
 const fs = require('fs');
 const mysql = require('mysql');
 const config = require('../../root/config/minewatchconfig');
-const { closeConnection, establishConnection, data } = require('../api/api');
+let { closeConnection, establishConnection, data, urlJsonFile } = require('../api/api');
 const version = require ('../../root/mwapi/js/checkerVersion');
-const existingConfig = require("../../root/config/minewatchconfig");
 const logger = require("../../root/misc/logger");
+let { jsonapi } = require("../../root/mwapi/js/checkerJson");
 
 let configchanged = {
     host: 'localhost',
@@ -46,6 +46,7 @@ if (version === "latest") {
                 "            - service api start : Démarre le service API.\n" +
                 "            - service api stop : Arrête le service API.\n" +
                 "            - service editor config : Accède à l'éditeur de config.\n" +
+                "            - service editor json : Accède à l'éditeur de JsonAPI.\n" +
                 "            - clear : Efface l'écran.\n" +
                 "            - exit : Quitte l'application.\n");
 
@@ -97,6 +98,33 @@ module.exports = minewatchconfig;
                         });
                     });
                 });
+            });
+        }
+
+        function editJson() {
+
+            console.clear();
+            console.log(logger.message.green);
+            rl.question('Avez-vous le tableau json quand vous allez sur lurl api.js ? (y/n) : ', (answer) => {
+                if (answer === "y") {
+                    console.clear();
+
+                    rl.question('Entrez lurl du fichier json : ', (url) => {
+                        console.clear();
+                        urlJsonFile = url;
+                        jsonapi = true;
+
+                        console.log("Fin de l'édition du fichier json.mwapi");
+                        rl.prompt();
+                    });
+
+                } else if (answer === "n") {
+                    console.clear();
+                    jsonapi = false;
+
+                    console.log("Fin de l'édition du fichier json.mwapi");
+                    rl.prompt();
+                }
             });
         }
 
@@ -156,6 +184,10 @@ module.exports = minewatchconfig;
                                     console.log(prefix + 'Ouverture de l\'éditeur de configuration...');
                                     editConfig();
                                     break;
+
+                                case 'json':
+                                    console.log(prefix + 'Ouverture de l\'éditeur de JsonAPI...');
+
 
                                 default:
                                     console.log("Sous-commande 'config attendue pour 'service editor'.\n");

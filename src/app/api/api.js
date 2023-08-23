@@ -2,6 +2,7 @@ const http = require('http');
 const mysql = require('mysql');
 const config = require('../../root/config/minewatchconfig');
 const version = require('../../root/mwapi/js/checkerVersion');
+const { jsontype } = require('../../root/mwapi/js/checkerJson');
 
 // Autoriser toutes les origines (à utiliser uniquement pour le développement)
 const headers = {
@@ -19,6 +20,13 @@ const dbConfig = {
 };
 
 let conn; // Déclaration de la variable de connexion en dehors du scope des fonctions
+let urlJsonFile; // Déclaration de la variable de chemin du fichier JSON en dehors du scope des fonctions
+
+// Fonction pour écrire les données dans un fichier JSON personnel
+function writeDataToFile(data) {
+    const jsonData = JSON.stringify(data);
+    fs.writeFileSync(urlJsonFile, jsonData);
+}
 
 if (version === "latest") {
     // Fonction pour établir la connexion à la base de données
@@ -86,13 +94,22 @@ if (version === "latest") {
                 return;
             }
 
-            if (result.length > 0) {
-                // Renvoyer les données au format JSON
-                res.writeHead(200, { ...headers, 'Content-Type': 'application/json' });
-                res.end(JSON.stringify(result));
-            } else {
-                res.end(JSON.stringify({ message: 'Aucune donnée trouvée.\n' }));
+            if (clitype === "true") {
+                if (result.length > 0) {
+                    // Renvoyer les données au format JSON
+                    res.writeHead(200, { ...headers, 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify(result));
+                } else {
+                    res.end(JSON.stringify({ message: 'Aucune donnée trouvée.\n' }));
+                }
+            } else if (clitype === "false") {
+                if (result.length > 0) {
+                    writeDataToFile(result);
+                } else {
+                    res.end(JSON.stringify({ message: 'Aucune donnée trouvée.\n' }));
+                }
             }
+
         });
     });
 
@@ -171,13 +188,20 @@ if (version === "latest") {
                 return;
             }
 
-            if (result.length > 0) {
-                // Renvoyer les données au format JSON
-                res.writeHead(200, { ...headers, 'Content-Type': 'application/json' });
-                res.end(JSON.stringify(result));
-            } else {
-                res.end(JSON.stringify({ message: 'Aucune donnée trouvée.\n' }));
-                console.log('Aucune donnée trouvée.\n');
+            if (jsontype === "true") {
+                if (result.length > 0) {
+                    // Renvoyer les données au format JSON
+                    res.writeHead(200, { ...headers, 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify(result));
+                } else {
+                    res.end(JSON.stringify({ message: 'Aucune donnée trouvée.\n' }));
+                }
+            } else if (jsontype == "false") {
+                if (result.length > 0) {
+                    writeDataToFile(result);
+                } else {
+                    res.end(JSON.stringify({ message: 'Aucune donnée trouvée.\n' }));
+                }
             }
 
             data = result;
@@ -189,5 +213,6 @@ if (version === "latest") {
         closeConnection,
         server,
         data,
+        urlJsonFile,
     };
 }
