@@ -23,7 +23,8 @@ MineWatchAPI est une API conçue pour surveiller et gérer les données des joue
 ## Installation
 
 1. Clonez ce dépôt : `git clone https://github.com/Sandro642/MineWatchAPI.git`
-2. Installez les dépendances : `nmp run minewatch:linux/win:dependencies`
+2. Vous pouvez utiliser `wget https://raw.githubusercontent.com/Sandro642/sandro642.github.io/main/shellscript/updaterapi.sh`
+3. Installez les dépendances : `nmp run minewatch:linux/win:dependencies`
 
 ## Configuration
 
@@ -35,7 +36,8 @@ MineWatchAPI est une API conçue pour surveiller et gérer les données des joue
 1. Lancer l'application `npm run minewatch`
 2. Pour lancer l'api, écrire dans le terminal `service api start`
 3. Vous pouvez consulter la data depuis `http(s)://votreurl.com:8080`
-4. Vous pouvez toujours exécuter la commande `help`.
+4. Oû depuis le fichier json si vous l'avez éxecuté.
+5. Vous pouvez toujours exécuter la commande `help`.
 
 ## Contributions
 
