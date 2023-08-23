@@ -187,6 +187,8 @@ module.exports = minewatchconfig;
 
                                 case 'json':
                                     console.log(prefix + 'Ouverture de l\'éditeur de JsonAPI...');
+                                    editJson();
+                                    break;
 
 
                                 default:
@@ -258,6 +260,7 @@ else if (version === "dev") {
                 "            - service api start : Démarre le service API.\n" +
                 "            - service api stop : Arrête le service API.\n" +
                 "            - service editor config : Accède à l'éditeur de config.\n" +
+                "            - service editor json : Accède à l'éditeur de JsonAPI.\n" +
                 "            - debug : Affiche les données de débogage.\n" +
                 "            - updater : Met à jour l'API.\n" +
                 "            - clear : Efface l'écran.\n" +
@@ -309,6 +312,33 @@ module.exports = minewatchconfig;
                         });
                     });
                 });
+            });
+        }
+
+        function editJson() {
+
+            console.clear();
+            console.log(logger.message.green);
+            rl.question('Avez-vous le tableau json quand vous allez sur lurl api.js ? (y/n) : ', (answer) => {
+                if (answer === "y") {
+                    console.clear();
+
+                    rl.question('Entrez lurl du fichier json : ', (url) => {
+                        console.clear();
+                        urlJsonFile = url;
+                        jsonapi = true;
+
+                        console.log("Fin de l'édition du fichier json.mwapi");
+                        rl.prompt();
+                    });
+
+                } else if (answer === "n") {
+                    console.clear();
+                    jsonapi = false;
+
+                    console.log("Fin de l'édition du fichier json.mwapi");
+                    rl.prompt();
+                }
             });
         }
 
@@ -366,6 +396,11 @@ module.exports = minewatchconfig;
                                 case 'config':
                                     console.log(prefix + 'Ouverture de l\'éditeur de configuration...');
                                     editConfig();
+                                    break;
+
+                                case 'json':
+                                    console.log(prefix + 'Ouverture de l\'éditeur de json...');
+                                    editJson();
                                     break;
 
                                 default:
