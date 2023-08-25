@@ -1,6 +1,6 @@
 # MineWatchAPI :pick: :mag_right:
 
-> API de surveillance et de gestion des joueurs pour votre serveur Minecraft.
+> API de surveillance et de gestion de la base de donnée.
 
 ## Table des matières
 
@@ -14,7 +14,7 @@
 
 ## Aperçu
 
-MineWatchAPI est une API conçue pour surveiller et gérer les données des joueurs sur votre serveur Minecraft. Elle offre une interface simple pour accéder aux informations de la table `table_joueurs` de votre base de données MySQL.
+MineWatchAPI est une API conçue pour surveiller et gérer les données d'une base de donnée. Elle offre une interface simple pour accéder aux informations de la table `table_joueurs` de votre base de données MySQL.
 
 ## Captures d'écran
 
