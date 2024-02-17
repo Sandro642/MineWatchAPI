@@ -4,13 +4,11 @@ const { exec } = require('child_process');
 const path = require('path');
 const simpleGit = require('simple-git');
 
-class AutoUpdater {
-
-    async getLocalCommitHash() {
+function getLocalCommitHash() {
         const git = simpleGit({ baseDir: this.repoPath });
     
         try {
-            const log = await git.log();
+            const log = git.log();
             if (log && log.latest) {
                 return log.latest.hash;
             } else {
@@ -22,7 +20,7 @@ class AutoUpdater {
     }
     
 
-    async getGithubCommitHash() {
+function getGithubCommitHash() {
         // Vous devrez utiliser l'API GitHub pour récupérer le dernier hash du commit sur votre référentiel GitHub
         // Ici, vous pouvez utiliser des bibliothèques comme octokit/rest.js pour interagir avec l'API GitHub.
         // Je vais vous montrer un exemple générique.
@@ -43,9 +41,9 @@ class AutoUpdater {
                     reject(error);
                 });
         });
-    }
+}
 
-    async pullChanges() {
+function pullChanges() {
         return new Promise((resolve, reject) => {
             exec('git pull', { cwd: this.repoPath }, (error, stdout, stderr) => {
                 if (error) {
@@ -55,11 +53,7 @@ class AutoUpdater {
                 resolve();
             });
         });
-    }
 }
-
-// Utilisation de la classe AutoUpdater
-const Updater = new AutoUpdater();
 
 function checkAndUpdate() {
     console.log('Recherche de mises à jours...')
@@ -67,15 +61,19 @@ function checkAndUpdate() {
     try {
 
         // Récupérer le dernier hash du commit local
-        const localHash = Updater.getLocalCommitHash();
+        const localHash = getLocalCommitHash();
+
+        console.log('Dernier commit local :', localHash);
 
         // Récupérer le dernier hash du commit sur GitHub
-        const githubHash = Updater.getGithubCommitHash();
+        const githubHash = getGithubCommitHash();
+
+        console.log('Dernier commit sur GitHub :', githubHash);
 
         // Comparer les deux hashes
         if (localHash !== githubHash) {
             // Effectuer un pull si les hashes sont différents
-            Updater.pullChanges();
+            pullChanges();
             console.log('MineWatchAPI a été mis à jour avec succès !');
             setTimeout(() => {
                  console.log('Redémarrez MineWatchAPI pour appliquer les changements.'.green);
