@@ -37,7 +37,8 @@ MineWatchAPI est une API conçue pour surveiller et gérer les données d'une ba
 2. Pour lancer l'api, écrire dans le terminal `service api start`
 3. Vous pouvez consulter la data depuis `http(s)://votreurl.com:8080`
 4. Oû depuis le fichier json si vous l'avez éxecuté.
-5. Vous pouvez toujours exécuter la commande `help`.
+5. Vous pouvez mettre MineWatchAPI grâce à une seule commande en faisant `updater`. Il suffit juste de passer MineWatchAPI en version de développement. Prochainement en version current (latest).
+6. Vous pouvez toujours exécuter la commande `help`.
 
 ## Contributions
 
