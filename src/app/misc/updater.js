@@ -80,6 +80,7 @@ function checkAndUpdate() {
             setTimeout(() => {
                  console.log('Redémarrez MineWatchAPI pour appliquer les changements.'.green);
                  setTimeout(() => {
+                        console.clear();
                         process.exit(0);
                     }, 3000);
             }, 3000);
