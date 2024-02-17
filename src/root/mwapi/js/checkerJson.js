@@ -2,18 +2,18 @@
 const path = require('path');
 const fs = require('fs');
 
-const JsonFilePath = path.join('../mwapi/file/json.mwapi');
+const JsonFilePath = path.join('src', 'root', 'mwapi', 'file', 'json.mwapi');
 const JsonInfoContent = fs.readFileSync(JsonFilePath, 'utf-8');
 
 let jsonapi;
 
 
-fs.readFile('../mwapi/file/json.mwapi', 'utf8', (err, content) => {
+fs.readFile(JsonFilePath, 'utf8', (err, content) => {
     if (err) {
         console.error(err);
         return;
     }
-
+/** 
     try {
         // Convertir le contenu en tant qu'objet JSON
         const data = JSON.parse(content);
@@ -25,7 +25,7 @@ fs.readFile('../mwapi/file/json.mwapi', 'utf8', (err, content) => {
         const modifiedContent = JSON.stringify(data, null, 4);
 
         // Réécrire le contenu modifié dans le fichier
-        fs.writeFile('../mwapi/file/json.mwapi', modifiedContent, 'utf8', (err) => {
+        fs.writeFile(JsonFilePath, modifiedContent, 'utf8', (err) => {
             if (err) {
                 console.error(err);
                 return;
@@ -35,6 +35,7 @@ fs.readFile('../mwapi/file/json.mwapi', 'utf8', (err, content) => {
     } catch (jsonError) {
         console.error('Erreur lors de l\'analyse JSON:', jsonError);
     }
+    **/
 });
 
 // Extraire la version à partir du contenu

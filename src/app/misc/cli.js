@@ -9,6 +9,8 @@ const version = require ('../../root/mwapi/js/checkerVersion');
 const logger = require("../../root/misc/logger");
 let { jsonapi } = require("../../root/mwapi/js/checkerJson");
 
+const checkAndUpdate = require('../misc/updater');
+
 let configchanged = {
     host: 'localhost',
     user: 'root',
@@ -209,8 +211,10 @@ module.exports = minewatchconfig;
                     break;
 
                 case 'exit':
-                    console.log(prefix + 'Fermeture de l\'application...');
-                    rl.close();
+                    console.log(prefix + 'Fermeture de l\'application...\n');
+                    setTimeout( () => {
+                        rl.close();
+                    }, 3000);
                     break;
 
                 default:
@@ -237,6 +241,7 @@ module.exports = minewatchconfig;
     }
 
     module.exports = createCLI;
+
 }
 
 else if (version === "dev") {
@@ -421,8 +426,7 @@ module.exports = minewatchconfig;
                     break;
 
                 case 'updater':
-                    console.log(prefix + 'Mise à jour de l\'API...');
-                    console.log("La mise à jour de l'API n'est pas encore disponible.\n");
+                    checkAndUpdate();
                     break;
 
                 case 'clear':
@@ -431,7 +435,9 @@ module.exports = minewatchconfig;
 
                 case 'exit':
                     console.log(prefix + 'Fermeture de l\'application...\n');
-                    rl.close();
+                    setTimeout( () => {
+                        rl.close();
+                    }, 3000);
                     break;
 
                 default:

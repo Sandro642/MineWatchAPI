@@ -1,10 +1,10 @@
 
 const minewatchconfig = {
 host: 'localhost',
-user: 'exit',
-password: 'exit',
-database: 'exit',
-port: 3306
+user: 'root',
+password: 'root',
+database: 'test',
+port: 3600
 };
 
 module.exports = minewatchconfig;
